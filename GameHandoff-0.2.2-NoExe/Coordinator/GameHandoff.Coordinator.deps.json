@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "GameHandoff.Coordinator/0.2.2": {
+        "dependencies": {
+          "GameHandoff.Common": "0.2.2"
+        },
+        "runtime": {
+          "GameHandoff.Coordinator.dll": {}
+        }
+      },
+      "GameHandoff.Common/0.2.2": {
+        "runtime": {
+          "GameHandoff.Common.dll": {
+            "assemblyVersion": "0.2.2.0",
+            "fileVersion": "0.2.2.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GameHandoff.Coordinator/0.2.2": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GameHandoff.Common/0.2.2": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
