@@ -1,11 +1,11 @@
-# Game Handoff 0.2.2 verification record
+# Game Handoff 0.2.4 verification record
 
-Verified on 2026-09-18 for Windows x64.
+Verified on 2026-09-26 for Windows x64.
 
 ## Exact compatibility inputs
 
 - Hollow Knight tested target: 1.5.78.11833, checked against `D:\HKrip` and the
-  Modding API v77 patched game assembly. Release 0.2.2 intentionally treats a
+  Modding API v77 patched game assembly. Release 0.2.4 intentionally treats a
   different Hollow Knight game version as a warning rather than a startup error.
 - Modding API v77 Windows ZIP SHA-256:
   `BC9F0DB3D0916B05CD5A2420BB602FB1B239CE3FF6C289FD84BFFB682FB8F1D6`
@@ -25,6 +25,11 @@ field, property, event, and BepInEx plugin GUID used by the adapters. Hollow
 Knight DebugMod 1.4.10.5 was also rebuilt from source against the exact v77
 reference set with zero compile errors.
 
+For the boss extension, the 51 scene/object pairs embedded in the adapter were
+mechanically compared with the source-defined Silksong boss list with no
+differences. Binary metadata inspection separately confirmed DebugMod 1.1.2's
+public `customData` dictionary used to carry the extension payload.
+
 ## Clean builds
 
 The Common library, coordinator, Hollow Knight adapter, Silksong adapter, and
@@ -34,11 +39,12 @@ DLL with apphost generation disabled, so the release contains no custom EXE. It
 was launched through Microsoft's installed `dotnet` host and smoke-tested from
 the extracted release archive.
 
-The final Windows ZIP and its extracted release directory were each scanned on
-2026-09-18 with the installed Microsoft Defender command-line scanner in custom
-scan / no-remediation mode. Both scans completed with `found no threats`. This
-does not guarantee identical results from every antivirus vendor, so the package
-also includes per-file SHA-256 hashes and a separate buildable source archive.
+The final Windows ZIP, its extracted release directory, and the source ZIP were
+each scanned on 2026-09-26 with the installed Microsoft Defender command-line
+scanner in custom scan / no-remediation mode. All scans completed with `found no
+threats`. This does not guarantee identical results from every antivirus vendor,
+so the package also includes per-file SHA-256 hashes and a separate buildable
+source archive.
 
 ## Automated test coverage
 
@@ -59,6 +65,9 @@ The final test run passed all of the following:
 - local game disconnect freezing/disarming both computers;
 - reconnect requiring both players to re-arm;
 - deliberately stalled state capture triggering the exchange timeout;
+- hero death during a delayed state capture cancelling the handoff, resuming the
+  original games, disarming both computers, rejecting the late snapshot, and
+  completing a clean handoff after two-sided re-arm;
 - one-click preflight passing against a synthetic exact-version installation;
 - internal package SHA-256 manifest verification after ZIP extraction.
 
@@ -71,7 +80,17 @@ for DebugMod success plus a stable post-load game state, and any rejection,
 exception signal, disconnect, heartbeat loss, or timeout freezes both sides
 instead of committing a possibly divergent handoff.
 
-Release 0.2.2 additionally suppresses fatal/hazard-transition handoffs, performs
+Release 0.2.4 preserves the HP of all active Hollow Knight encounter objects in
+an outer handoff envelope while leaving DebugMod's Colosseum wave, Pantheon
+sequence/index, and room-specific fields unchanged. Silksong continues to
+preserve active boss HP inside DebugMod's
+custom savestate data. Boss identification uses the source-defined 1.0.30000
+scene/object list (the shipped DebugMod 1.1.2 DLL does not expose that newer
+private table), with BossSceneController as a fallback. Restore only updates
+matched live HealthManager objects and never spawns missing objects or forces
+arbitrary PlayMaker states. The coordinator now has an explicit synchronized
+hero-death abort, uses monotonic epochs across re-arms, and lets the normal
+death/respawn finish instead of fault-freezing every game. It retains the 0.2.2 fatal/hazard suppression,
 post-load terrain-overlap correction, and retries Windows focus activation three
 times. These Unity/desktop behaviors require the next real two-computer playtest;
 the coordinator-side duplicate-swap cooldown is covered by integration tests.

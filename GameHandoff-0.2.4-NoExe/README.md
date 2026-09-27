@@ -1,4 +1,4 @@
-# Game Handoff 0.2.2
+# Game Handoff 0.2.4
 
 Game Handoff swaps two players between **Hollow Knight** and **Hollow Knight:
 Silksong 1.0.30000** whenever either active player loses health. Hollow Knight
@@ -121,7 +121,7 @@ Run Preflight.cmd -Mode client -HollowKnightPath "D:\Games\Hollow Knight" -Silks
    Do not arm during a cutscene, death, elevator ride, or room transition.
 3. Launch each coordinator.
 4. Enter `status`. Each coordinator must show `peer=connected`, both local games,
-   both remote games, and coordinator `0.2.2/0.2.2`.
+   both remote games, and coordinator `0.2.4/0.2.4`.
 5. Enter `arm` on both computers.
 6. The host begins in `initialGame`; the friend begins in the other game.
 7. When either active player loses health, both current games freeze, both states
@@ -132,6 +132,26 @@ death/respawn sequence is allowed to finish. For 1.5 seconds after a completed
 load, duplicate damage notifications are ignored to prevent an immediate second
 switch. After loading, the adapter also moves the hero only if its collider is
 actually overlapping terrain.
+
+Silksong handoffs also preserve the current HP of active bosses using the boss
+scene/object list for Silksong 1.0.30000, with the game's BossSceneController as
+a fallback. DebugMod's existing room-specific handlers continue to preserve
+supported arena waves and special phases. The adapter does not force a boss's
+exact mid-attack animation/FSM state, because replaying state-entry actions can
+duplicate a boss or soft-lock the arena; the receiving game resumes from its
+normal live AI state with the transferred boss HP.
+
+Hollow Knight handoffs preserve the HP of every active encounter object. This
+covers ordinary bosses, multi-part bosses, and enemies already alive in an arena
+wave. DebugMod's native room-specific data remains intact: Colosseum wave state,
+Pantheon sequence/boss index, and Silksong `BattleScene` wave progress are all
+transferred. Missing runtime objects are skipped instead of spawned.
+
+Lethal hits are delayed for 0.1 seconds before a handoff decision so the games'
+death flags can settle. If either hero dies after a handoff has already started,
+the coordinators now cancel that epoch, discard late snapshots, resume the
+original active games, and disarm. Let the normal death/respawn finish, then use
+`arm` on both computers again.
 
 Coordinator commands:
 

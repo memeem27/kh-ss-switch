@@ -115,7 +115,7 @@ function Read-Ini([string]$Path) {
 
 $hkRoot = Find-GameRoot $HollowKnightPath "Hollow Knight"
 $ssRoot = Find-GameRoot $SilksongPath "Hollow Knight Silksong"
-Write-Host "Game Handoff 0.2.2 preflight ($Mode)" -ForegroundColor Cyan
+Write-Host "Game Handoff 0.2.4 preflight ($Mode)" -ForegroundColor Cyan
 Write-Host "Hollow Knight root: $hkRoot"
 Write-Host "Silksong root:     $ssRoot"
 Write-Host ""
@@ -154,10 +154,10 @@ Write-Check ((Get-AssemblyVersion $hkDebug) -eq "1.4.10.5") `
     "HK DebugMod version" ("found " + (Get-AssemblyVersion $hkDebug) + "; required 1.4.10.5")
 Write-Check (Test-ExactHash $hkDebug "F3712E5AAAC6DA9C8967CEE513CCBECEB8B7981342D3D850E897F77AE9F531A3") `
     "HK DebugMod binary" "must match the tested 1.4.10.5 build"
-Write-Check ((Get-AssemblyVersion $hkAdapter) -eq "0.2.2.0") `
-    "HK Game Handoff adapter" ("found " + (Get-AssemblyVersion $hkAdapter) + "; required 0.2.2.0")
-Write-Check ((Get-AssemblyVersion $hkCommon) -eq "0.2.2.0") `
-    "HK shared library" ("found " + (Get-AssemblyVersion $hkCommon) + "; required 0.2.2.0")
+Write-Check ((Get-AssemblyVersion $hkAdapter) -eq "0.2.4.0") `
+    "HK Game Handoff adapter" ("found " + (Get-AssemblyVersion $hkAdapter) + "; required 0.2.4.0")
+Write-Check ((Get-AssemblyVersion $hkCommon) -eq "0.2.4.0") `
+    "HK shared library" ("found " + (Get-AssemblyVersion $hkCommon) + "; required 0.2.4.0")
 
 $ssBepInEx = if ($ssRoot) { Join-Path $ssRoot "BepInEx\core\BepInEx.dll" } else { "" }
 $ssDebug = if ($ssRoot) { Join-Path $ssRoot "BepInEx\plugins\hk_speedrunning-DebugMod\DebugMod.dll" } else { "" }
@@ -170,14 +170,14 @@ Write-Check ((Get-AssemblyVersion $ssDebug) -eq "1.1.2.0") `
     "Silksong DebugMod version" ("found " + (Get-AssemblyVersion $ssDebug) + "; required 1.1.2.0")
 Write-Check (Test-ExactHash $ssDebug "7E7D52C11A7A67C9D2E27D3B497FA192CD50CB38B314602417011671F7E8CC78") `
     "Silksong DebugMod binary" "must match the tested 1.1.2 build"
-Write-Check ((Get-AssemblyVersion $ssAdapter) -eq "0.2.2.0") `
-    "Silksong Game Handoff adapter" ("found " + (Get-AssemblyVersion $ssAdapter) + "; required 0.2.2.0")
-Write-Check ((Get-AssemblyVersion $ssCommon) -eq "0.2.2.0") `
-    "Silksong shared library" ("found " + (Get-AssemblyVersion $ssCommon) + "; required 0.2.2.0")
+Write-Check ((Get-AssemblyVersion $ssAdapter) -eq "0.2.4.0") `
+    "Silksong Game Handoff adapter" ("found " + (Get-AssemblyVersion $ssAdapter) + "; required 0.2.4.0")
+Write-Check ((Get-AssemblyVersion $ssCommon) -eq "0.2.4.0") `
+    "Silksong shared library" ("found " + (Get-AssemblyVersion $ssCommon) + "; required 0.2.4.0")
 
 $coordinator = Join-Path $PSScriptRoot "Coordinator\GameHandoff.Coordinator.dll"
-Write-Check ((Get-AssemblyVersion $coordinator) -eq "0.2.2.0") `
-    "Coordinator" ("found " + (Get-AssemblyVersion $coordinator) + "; required 0.2.2.0")
+Write-Check ((Get-AssemblyVersion $coordinator) -eq "0.2.4.0") `
+    "Coordinator" ("found " + (Get-AssemblyVersion $coordinator) + "; required 0.2.4.0")
 Write-Check (Test-DotNet8Runtime) ".NET runtime" "Microsoft.NETCore.App 8.x is required"
 
 $configPath = Join-Path $PSScriptRoot ("Coordinator\" + $Mode + ".ini")
